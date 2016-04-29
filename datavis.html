@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Coral Hackathon project</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/main.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="styles/datavis.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <div class="header">
+      <h1>Visualize all the things!</h1>
+    </div>
+    <div class="container vis-container">
+      <section id="moderation" class="hide">
+        <h3>Moderation</h3>
+        <div class="data-container">
+          <div class="explanation">
+            <p>About <span class="highest-moderated-percentage"></span>% of the site
+            moderated comments are being <span class="highest-moderated-type"></span>
+            by <span class="highest-moderated-by"></span> and <span class="moderator-flagged-percentage"></span>% are flagged by the moderators.</p>
+            <p>Also there are <span class="untouched-number"></span>
+              published without moderation, meaning
+              that <span class="untouched-percentage"></span>% of the comments should be moderated.</p>
+          </div>
+          <div class="chart">
+            <canvas height="250" id="moderation-chart"></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="js/xenia-driver.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/datavis.js"></script>
+  </body>
+</html>

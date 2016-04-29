@@ -1,0 +1,20 @@
+
+.vis-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.hide {
+  display: none;
+}
+
+.data-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.data-container .explanation, .data-container .chart {
+  flex: 1;
+  min-width: 400px;
+}

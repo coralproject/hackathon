@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Coral Hackathon project</title>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="styles/highlight.css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="styles/main.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <div class="header">
+      <h1>Database query recipes</h1>
+      <p>Open DevTools to see the results after hitting the Run button</p>
+    </div>
+    <div class="container recipes">
+      <div class="recipe">
+        <h4>User random sample</h4>
+        <pre><code class="javascript">
+xenia()
+  .collection('users')
+  .sample(10)
+.exec()
+.then(function(res){
+  console.log(res.results)
+})
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <h4>User with most comments statistics</h4>
+        <pre><code class="javascript">
+xenia()
+  .include(['name', 'avatar',
+            'statistics.comments.all.all',
+            'stats'])
+  .sort(['stats.comments', -1])
+  .limit(10)
+.exec()
+  .then(function(res){
+    console.log(res.results)
+  })
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <h4>User comments distribution</h4>
+        <pre><code class="javascript">
+xenia()
+  .project({
+    count: {
+      $subtract: ['$stats.comments', {
+      /* 50 is the interval size.
+         A higher number means
+        less datapoints */
+        $mod: ['$stats.comments', 50]
+      }]
+    }, _id: false })
+  .group({ _id: '$count', count: { $sum: 1 } })
+  .sort(['_id', 1])
+.exec()
+  .then(function(res){
+    console.log(res.results[0].Docs)
+  })
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <h4>Users with higher flagged comments ratio</h4>
+        <pre><code class="javascript">
+var flagged = 'statistics.comments'
+flagged += '.all.ratios.SystemFlagged'
+
+xenia()
+  .include(['name', 'avatar', flagged])
+  .sort([flagged, -1])
+  .limit(20)
+.exec()
+  .then(function(res) {
+    console.log(res.results[0].Docs)
+  })
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <h4>Oldest unmoderated comments</h4>
+        <pre><code class="javascript">
+xenia()
+  .collection('comments')
+  .include(['body', 'date_created', 'status'])
+  .match({ status: 'Untouched' })
+  .sort(['date_created', 1])
+  .limit(20)
+.exec()
+  .then(function(res) {
+    console.log(res.results[0].Docs)
+  })
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+
+      <div class="recipe">
+        <h4>Comments sample with associated article info</h4>
+        <pre><code class="javascript">
+xenia()
+  .collection('comments')
+  .sample(20)
+  .join('assets', '_id', 'asset_id', 'article')
+.exec()
+  .then(function(res) {
+    console.log(res.results[0].Docs)
+  })
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <h4>Paginated comments</h4>
+        <pre><code class="javascript">
+function getComments(page, pageSize) {
+  return xenia()
+    .collection('comments')
+    .limit(pageSize)
+    // page count starts in 1
+    .skip(pageSize * (page - 1))
+  .exec()
+}
+
+getComments(3, 15)
+.then(function(res) {
+  console.log(res.results[0].Docs)
+});
+        </code></pre>
+        <div class="controls">
+          <button class="run">Run</button>
+          <button class="clip">Copy to clipboard</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/xenia-driver.js" charset="utf-8"></script>
+    <script src="js/highlight.js" charset="utf-8"></script>
+    <script src="js/recipes.js" charset="utf-8"></script>
+  </body>
+</html>
