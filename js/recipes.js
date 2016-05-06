@@ -6,7 +6,7 @@ var $clip = document.querySelectorAll('.clip')
 
 for(var i = 0; i < $run.length; i++) {
   $run[i].addEventListener('click', function(){
-    eval(this.parentNode.querySelector('code').textContent)
+    eval(this.parentNode.parentNode.querySelector('code').textContent)
   })
 
   $clip[i].addEventListener('click', function(){
